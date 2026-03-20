@@ -26,7 +26,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ---
 
-## Install
+## Install & Run
 
 ```bash
 git clone https://github.com/Vlad-2299/labelite
@@ -35,6 +35,7 @@ uv venv
 .venv\Scripts\activate
 uv pip install -e .
 labelite
+```
 
 ---
 
@@ -142,8 +143,8 @@ This is a visual marker only — no file is written.
 labelite/
 ├── pyproject.toml
 ├── README.md
-└── labelImg/
-    ├── labelImg.py          # Main window, command pattern, all UI logic
+└── labelite/
+    ├── labelite.py          # Main window, command pattern, all UI logic
     ├── data/
     │   └── predefined_classes.txt
     └── libs/
