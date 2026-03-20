@@ -146,7 +146,9 @@ labelite/
 └── labelite/
     ├── labelite.py          # Main window, command pattern, all UI logic
     ├── data/
-    │   └── predefined_classes.txt
+    │   └── classes.txt
+    │   └── image1.txt
+    │   └── image1.png
     └── libs/
         ├── canvas.py        # Drawing, selection, move/resize of bounding boxes
         ├── shape.py         # Shape data model and painter
