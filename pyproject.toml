@@ -12,9 +12,7 @@ license = { text = "MIT" }
 dependencies = ["PyQt5>=5.15", "lxml"]
 
 [project.scripts]
-# This tells pip: "Create a 'labelite' command that runs the main() function inside labelite/labelImg.py"
 labelite = "labelite.labelite:main"
 
 [tool.setuptools.packages.find]
-# This tells the build tool to grab the labelite folder and everything inside it
 include = ["labelite", "labelite.*"]

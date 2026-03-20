@@ -26,30 +26,15 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ---
 
-## Install & run
+## Install
 
 ```bash
 git clone https://github.com/Vlad-2299/labelite
 cd labelite
-uv run labelite
-```
-
-`uv run` creates a virtual environment, installs all dependencies, and launches the app in one step.
-
----
-
-## Running
-
-```bash
-# No arguments — opens an empty window
+uv venv
+.venv\Scripts\activate
+uv pip install -e .
 labelite
-
-# Open a directory of images directly
-labelite /path/to/images
-
-# Open a directory and write annotations to a separate folder
-labelite /path/to/images /path/to/classes.txt /path/to/annotations
-```
 
 ---
 
