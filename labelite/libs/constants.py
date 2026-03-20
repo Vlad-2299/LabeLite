@@ -1,0 +1,21 @@
+# Settings keys
+SETTING_FILENAME        = 'filename'
+SETTING_RECENT_FILES    = 'recentFiles'
+SETTING_WIN_SIZE        = 'window/size'
+SETTING_WIN_POSE        = 'window/position'
+SETTING_WIN_STATE       = 'window/state'
+SETTING_LINE_COLOR      = 'line/color'
+SETTING_FILL_COLOR      = 'fill/color'
+SETTING_ADVANCE_MODE    = 'advanced'
+SETTING_AUTO_SAVE       = 'autoSave'
+SETTING_SINGLE_CLASS    = 'singleClass'
+SETTING_PAINT_LABEL     = 'paintLabel'
+SETTING_DRAW_SQUARE     = 'drawSquare'
+SETTING_LABEL_FILE_FORMAT = 'labelFileFormat'
+SETTING_SAVE_DIR        = 'saveDir'
+SETTING_LAST_OPEN_DIR   = 'lastOpenDir'
+
+# Format names (displayed in UI)
+FORMAT_PASCALVOC = 'PascalVOC'
+FORMAT_YOLO      = 'YOLO'
+FORMAT_CREATEML  = 'CreateML'

@@ -1,0 +1,2 @@
+[console_scripts]
+labelite = labelite.labelite:main

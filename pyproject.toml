@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "labelite"
+version = "2.0.0"
+description = "Debloated YOLO bounding-box annotation tool"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["PyQt5>=5.15", "lxml"]
+
+[project.scripts]
+# This tells pip: "Create a 'labelite' command that runs the main() function inside labelite/labelImg.py"
+labelite = "labelite.labelite:main"
+
+[tool.setuptools.packages.find]
+# This tells the build tool to grab the labelite folder and everything inside it
+include = ["labelite", "labelite.*"]
