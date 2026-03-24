@@ -32,9 +32,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone https://github.com/Vlad-2299/labelite
 cd labelite
 uv venv
-.venv\Scripts\activate
+.venv\Scripts\activate / source .venv/Scripts/activate
 uv pip install -e .
-labelite
+labelite / python -m labelite.labelite
 ```
 
 ---
