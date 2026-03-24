@@ -166,6 +166,7 @@ class RelabelShapeCommand(Command):
             item.setIcon(self.mw._class_icon(label))
         self.mw.canvas.update()
         self.mw.set_dirty()
+        self.mw._update_class_counts()
 
     def execute(self): self._apply(self.new_label)
     def undo(self):    self._apply(self.old_label)
@@ -264,15 +265,17 @@ class MainWindow(QMainWindow, WindowMixin):
         classes_lbl.setStyleSheet('font-weight: bold;')
         dock_layout.addWidget(classes_lbl)
 
-        self.class_table = QTableWidget(0, 3)
-        self.class_table.setHorizontalHeaderLabels(['ID', 'Name', 'Color'])
+        self.class_table = QTableWidget(0, 4)
+        self.class_table.setHorizontalHeaderLabels(['ID', 'Name', 'Count', 'Color'])
         self.class_table.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents)
         self.class_table.horizontalHeader().setSectionResizeMode(
             1, QHeaderView.Stretch)
         self.class_table.horizontalHeader().setSectionResizeMode(
-            2, QHeaderView.Fixed)
-        self.class_table.setColumnWidth(2, 54)
+            2, QHeaderView.ResizeToContents)
+        self.class_table.horizontalHeader().setSectionResizeMode(
+            3, QHeaderView.Fixed)
+        self.class_table.setColumnWidth(3, 54)
         self.class_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.class_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.class_table.verticalHeader().setVisible(False)
@@ -677,6 +680,20 @@ class MainWindow(QMainWindow, WindowMixin):
         for class_id, label in enumerate(self.label_hist):
             self._add_class_table_row(class_id, label)
         self.class_table.blockSignals(False)
+        self._update_class_counts()
+
+    def _update_class_counts(self):
+        """Update the Count column in the class table from current canvas shapes."""
+        counts: dict[str, int] = {}
+        for shape in self.canvas.shapes:
+            counts[shape.label] = counts.get(shape.label, 0) + 1
+        for row in range(self.class_table.rowCount()):
+            name_item = self.class_table.item(row, 1)
+            if name_item:
+                count = counts.get(name_item.text(), 0)
+                count_item = self.class_table.item(row, 2)
+                if count_item:
+                    count_item.setText(str(count))
 
     def _add_class_table_row(self, class_id: int, label: str):
         """Append one row to the class table without triggering itemChanged."""
@@ -695,13 +712,19 @@ class MainWindow(QMainWindow, WindowMixin):
         name_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
         self.class_table.setItem(row, 1, name_item)
 
+        # Count column – read-only, shows number of annotations for this class
+        count_item = QTableWidgetItem('0')
+        count_item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+        count_item.setTextAlignment(Qt.AlignCenter)
+        self.class_table.setItem(row, 2, count_item)
+
         # Color column – clickable button
         color = self.class_colors.get(label, generate_color_by_text(label))
         btn   = QPushButton()
         btn.setFixedHeight(22)
         btn.setStyleSheet(self._color_btn_style(color))
         btn.clicked.connect(lambda checked, cid=class_id: self._pick_class_color(cid))
-        self.class_table.setCellWidget(row, 2, btn)
+        self.class_table.setCellWidget(row, 3, btn)
 
         self.class_table.blockSignals(False)
 
@@ -754,7 +777,7 @@ class MainWindow(QMainWindow, WindowMixin):
         for row in range(self.class_table.rowCount()):
             id_item = self.class_table.item(row, 0)
             if id_item and int(id_item.text()) == class_id:
-                btn = self.class_table.cellWidget(row, 2)
+                btn = self.class_table.cellWidget(row, 3)
                 if btn:
                     btn.setStyleSheet(self._color_btn_style(color))
                 break
@@ -789,6 +812,7 @@ class MainWindow(QMainWindow, WindowMixin):
         for act in self.actions.onShapesPresent:
             act.setEnabled(True)
         self._ensure_class_in_table(shape.label)
+        self._update_class_counts()
 
     def remove_label(self, shape):
         if shape is None:
@@ -799,6 +823,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.bbox_list.takeItem(self.bbox_list.row(item))
         del self.shapes_to_items[shape]
         del self.items_to_shapes[item]
+        self._update_class_counts()
 
     def _on_bbox_selection_changed(self):
         """Bbox list selection → select the corresponding shape on canvas."""
@@ -1396,6 +1421,8 @@ class MainWindow(QMainWindow, WindowMixin):
         if   os.path.isfile(xml_path):  self.load_pascal_xml_by_filename(xml_path)
         elif os.path.isfile(txt_path):  self.load_yolo_txt_by_filename(txt_path)
         elif os.path.isfile(json_path): self.load_create_ml_json_by_filename(json_path, file_path)
+
+        self._update_class_counts()
 
     def resizeEvent(self, event):
         if (self.canvas and not self.image.isNull()
