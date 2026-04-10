@@ -36,29 +36,15 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ---
 
-## Install & run
+## Install & Run
 
 ```bash
 git clone https://github.com/Vlad-2299/labelite
 cd labelite
-uv run labelite
-```
-
-`uv run` creates a virtual environment, installs all dependencies, and launches the app in one step.
-
----
-
-## Running
-
-```bash
-# No arguments — opens an empty window
-labelite
-
-# Open a directory of images directly
-labelite /path/to/images
-
-# Open a directory and write annotations to a separate folder
-labelite /path/to/images /path/to/classes.txt /path/to/annotations
+uv venv
+.venv\Scripts\activate / source .venv/bin/activate
+uv pip install -e .
+labelite / python -m labelite.labelite
 ```
 
 ---
@@ -167,10 +153,12 @@ This is a visual marker only — no file is written.
 labelite/
 ├── pyproject.toml
 ├── README.md
-└── labelImg/
-    ├── labelImg.py          # Main window, command pattern, all UI logic
+└── labelite/
+    ├── labelite.py          # Main window, command pattern, all UI logic
     ├── data/
-    │   └── predefined_classes.txt
+    │   └── classes.txt
+    │   └── image1.txt
+    │   └── image1.png
     └── libs/
         ├── canvas.py        # Drawing, selection, move/resize of bounding boxes
         ├── shape.py         # Shape data model and painter

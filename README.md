@@ -34,7 +34,7 @@ cd labelite
 uv venv
 .venv\Scripts\activate / source .venv/bin/activate
 uv pip install -e .
-labelite / python -m labelite.labelite
+uv run labelite / python -m labelite.labelite
 ```
 
 ---
